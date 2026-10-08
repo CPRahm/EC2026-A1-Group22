@@ -1,0 +1,5 @@
+Results folder: /Users/notkartikye/VU Amsterdam/VU_P1/Evolutionary Computing/Assignment_1/22/22_code/assignments/assignment_2/results/final
+Runs found: 15
+Comparison budget: 10010 evaluations
+
+No errors.

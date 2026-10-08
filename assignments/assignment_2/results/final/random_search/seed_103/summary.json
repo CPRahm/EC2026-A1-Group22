@@ -1,0 +1,22 @@
+{
+  "status": "completed",
+  "experiment": "final",
+  "method": "random_search",
+  "algorithm": "random_search",
+  "mutation_strength": null,
+  "seed": 103,
+  "evaluations": 10010,
+  "max_evaluations": 10010,
+  "generations_completed": 1000,
+  "stopped_on_plateau": false,
+  "failed_evaluations": 0,
+  "initial_best": 1.877442617731996,
+  "final_best": 1.3350977097500747,
+  "improvement": 0.5423449079819214,
+  "best_found_at_evaluation": 895,
+  "evaluation_seconds_median": 0.26626272900102776,
+  "evaluation_seconds_p95": 0.3347914105983363,
+  "wall_seconds": 2690.1250820839996,
+  "started_utc": "2026-10-08T15:23:34+00:00",
+  "finished_utc": "2026-10-08T16:08:24+00:00"
+}

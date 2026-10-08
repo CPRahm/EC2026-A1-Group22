@@ -1,0 +1,16 @@
+method,seed,evaluations_run,best_at_budget,best_at_end,stopped_before_others
+ea_sigma_0.1,101,10010,1.309459,1.309459,False
+ea_sigma_0.1,102,10010,0.410007,0.410007,False
+ea_sigma_0.1,103,10010,1.260408,1.260408,False
+ea_sigma_0.1,104,10010,1.394292,1.394292,False
+ea_sigma_0.1,105,10010,1.228049,1.228049,False
+ea_sigma_0.5,101,10010,0.518757,0.518757,False
+ea_sigma_0.5,102,10010,0.193729,0.193729,False
+ea_sigma_0.5,103,10010,1.083429,1.083429,False
+ea_sigma_0.5,104,10010,0.580204,0.580204,False
+ea_sigma_0.5,105,10010,0.786044,0.786044,False
+random_search,101,10010,1.287892,1.287892,False
+random_search,102,10010,1.382713,1.382713,False
+random_search,103,10010,1.335098,1.335098,False
+random_search,104,10010,1.336208,1.336208,False
+random_search,105,10010,1.310697,1.310697,False

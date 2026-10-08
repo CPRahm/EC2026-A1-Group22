@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -103,15 +104,19 @@ def create_initial_population(
     return Population(individuals)
 
 
+Evaluator = Callable[[np.ndarray, EvaluationSettings], EvaluationResult]
+
+
 def evaluate_individual(
     individual: Individual,
     settings: EvaluationSettings,
+    evaluator: Evaluator = evaluate,
 ) -> EvaluationResult:
     """Evaluate one controller using the simulation evaluator."""
 
     weights = individual_to_weights(individual)
 
-    return evaluate(
+    return evaluator(
         weights,
         settings,
     )
@@ -122,6 +127,7 @@ def evaluate_population(
     population: Population,
     settings: EvaluationSettings,
     tracker: EvaluationTracker,
+    evaluator: Evaluator = evaluate,
 ) -> Population:
     """Evaluate all individuals whose fitness is not yet known."""
 
@@ -130,6 +136,7 @@ def evaluate_population(
             result = evaluate_individual(
                 individual,
                 settings,
+                evaluator,
             )
             individual.fitness = result.fitness
 
@@ -395,6 +402,7 @@ def run_evolution(
     database_path: Path,
     db_handling: str = "halt",
     best_weights_path: Path | None = None,
+    evaluator: Evaluator = evaluate,
 ) -> EARunResult:
     """Run one EA configuration for one random seed."""
 
@@ -439,7 +447,9 @@ def run_evolution(
 
     tracker = EvaluationTracker()
 
-    evaluation_op = evaluate_population(settings=settings, tracker=tracker)
+    evaluation_op = evaluate_population(
+        settings=settings, tracker=tracker, evaluator=evaluator,
+    )
 
     # Evaluate the initial population before parent selection.
     population = evaluation_op(population)

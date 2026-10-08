@@ -1,0 +1,22 @@
+{
+  "status": "completed",
+  "experiment": "final",
+  "method": "ea_sigma_0.1",
+  "algorithm": "ea",
+  "mutation_strength": 0.1,
+  "seed": 102,
+  "evaluations": 10010,
+  "max_evaluations": 10010,
+  "generations_completed": 1000,
+  "stopped_on_plateau": false,
+  "failed_evaluations": 0,
+  "initial_best": 1.9527074636826816,
+  "final_best": 0.41000667800897783,
+  "improvement": 1.5427007856737038,
+  "best_found_at_evaluation": 7520,
+  "evaluation_seconds_median": 0.24497762499959208,
+  "evaluation_seconds_p95": 0.29365155349914857,
+  "wall_seconds": 2501.3670848340043,
+  "started_utc": "2026-10-08T15:23:34+00:00",
+  "finished_utc": "2026-10-08T16:05:15+00:00"
+}

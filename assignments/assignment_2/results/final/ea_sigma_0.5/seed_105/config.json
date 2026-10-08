@@ -1,0 +1,86 @@
+{
+  "condition": "ea_sigma_0.5",
+  "algorithm": "ea",
+  "mutation_strength": 0.5,
+  "seed": 105,
+  "started_utc": "2026-10-08T15:23:34+00:00",
+  "resolved": {
+    "experiment": "final",
+    "evaluation_settings": {
+      "controller": {
+        "joint_count": 6,
+        "hidden_size": 6,
+        "initial_weight_std": 0.5,
+        "frequency_hz": 1.0,
+        "target_distance_scale": 2.0
+      },
+      "spawn_position": [
+        0.0,
+        0.0,
+        0.1
+      ],
+      "target_position": [
+        2.0,
+        0.0,
+        0.1
+      ],
+      "duration": 15.0
+    },
+    "genome_length": 132,
+    "ea": {
+      "population_size": 10,
+      "number_of_children": 10,
+      "parent_fraction": 0.5,
+      "mutation_probability": 0.2,
+      "max_generations": 1000,
+      "plateau_patience": 1001,
+      "min_improvement": 0.0,
+      "max_evaluations": 10010,
+      "plateau_stopping": false
+    },
+    "conditions": {
+      "ea_sigma_0.1": {
+        "algorithm": "ea",
+        "mutation_strength": 0.1
+      },
+      "ea_sigma_0.5": {
+        "algorithm": "ea",
+        "mutation_strength": 0.5
+      },
+      "random_search": {
+        "algorithm": "random_search",
+        "mutation_strength": null
+      }
+    },
+    "failure_fitness": 1000.0,
+    "max_failed_evaluations": 10,
+    "rng": "One numpy.random.default_rng(seed) per run. EA: ea.py draws the initial population, then parent choices and mutations, from it. Random search: successive sample_weights draws, so its first population_size samples equal the EA's initial population for the same seed. Python's random and NumPy's legacy global RNG are seeded with the same seed, but no operator uses them. MuJoCo is deterministic."
+  },
+  "provenance": {
+    "git_commit": "f757185eaafcc9cf68289166bd40c221923c0ea0",
+    "git_status_porcelain": [
+      "?? assignments/assignment_2/results/final/"
+    ],
+    "framework_last_commit": "7c803267e178206a707281686c461582a3c0c38b 2026-09-01T15:49:55+02:00",
+    "framework_unmodified": true,
+    "ariel_imported_from": "/Users/notkartikye/VU Amsterdam/VU_P1/Evolutionary Computing/Assignment_1/22/22_code/src/ariel",
+    "ariel_is_repository_copy": true,
+    "python": "3.12.9 (main, Mar 17 2025, 21:36:21) [Clang 20.1.0 ]",
+    "platform": "macOS-27.0.1-arm64-arm-64bit",
+    "packages": {
+      "numpy": "2.3.3",
+      "mujoco": "3.8.0",
+      "sqlalchemy": "2.0.43",
+      "sqlmodel": "0.0.27",
+      "pydantic": "2.12.0"
+    },
+    "source_sha256": {
+      "controller.py": "90d3d40d620eb4997c76a7f29fa70c5c24454c977542c22a709262b9d6cd4695",
+      "evaluation.py": "a75c93eae0edd5fc4cd72822f1f1ac4b7f637bb0e572751bab76fabff72cb3a9",
+      "ea.py": "948879f0adeca0e9211b463d4e2f5a7e8cc6a214d611a07c6fe61a3ec505e7f5",
+      "random_search.py": "e862b4fd2de09a3e439af6f4180c3843e53b20911a8409eac4917f5c0d88416d",
+      "run_experiments.py": "23bd62f851adcab31b984c92a76f7f1c5c0259f1edd3f5434a110948524444fe",
+      "experiment_config.py": "5ea5c9e91f8b618099d91d9a33888eca95b70d5661decc8d499e2c0c51cc59fe"
+    }
+  }
+}

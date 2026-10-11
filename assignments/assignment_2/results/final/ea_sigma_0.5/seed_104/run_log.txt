@@ -1,0 +1,3 @@
+final: ea_sigma_0.5, seed 104, cap 10010 evaluations. Folder: /Users/notkartikye/VU Amsterdam/VU_P1/Evolutionary Computing/Assignment_1/22/22_code/__data__/assignment_2/_staging/assignments__assignment_2__results__final/ea_sigma_0.5/seed_104
+───────────────────────────────────────────────────────────────────── EA Initialized ──────────────────────────────────────────────────────────────────────
+Completed: best 0.8319 after 3130 evaluations, 0 failed.

@@ -1,0 +1,55 @@
+{
+  "resolved": {
+    "experiment": "final",
+    "evaluation_settings": {
+      "controller": {
+        "joint_count": 6,
+        "hidden_size": 6,
+        "initial_weight_std": 0.5,
+        "frequency_hz": 1.0,
+        "target_distance_scale": 2.0
+      },
+      "spawn_position": [
+        0.0,
+        0.0,
+        0.1
+      ],
+      "target_position": [
+        2.0,
+        0.0,
+        0.1
+      ],
+      "duration": 15.0
+    },
+    "genome_length": 132,
+    "ea": {
+      "population_size": 10,
+      "number_of_children": 10,
+      "parent_fraction": 0.5,
+      "mutation_probability": 0.2,
+      "max_generations": 1000,
+      "plateau_patience": 200,
+      "min_improvement": 0.01,
+      "max_evaluations": 10010,
+      "plateau_stopping": true
+    },
+    "conditions": {
+      "ea_sigma_0.1": {
+        "algorithm": "ea",
+        "mutation_strength": 0.1
+      },
+      "ea_sigma_0.5": {
+        "algorithm": "ea",
+        "mutation_strength": 0.5
+      },
+      "random_search": {
+        "algorithm": "random_search",
+        "mutation_strength": null
+      }
+    },
+    "failure_fitness": 1000.0,
+    "max_failed_evaluations": 10,
+    "rng": "One numpy.random.default_rng(seed) per run. EA: ea.py draws the initial population, then parent choices and mutations, from it. Random search: successive sample_weights draws, so its first population_size samples equal the EA's initial population for the same seed. Python's random and NumPy's legacy global RNG are seeded with the same seed, but no operator uses them. MuJoCo is deterministic."
+  },
+  "created_utc": "2026-10-11T00:51:24+00:00"
+}

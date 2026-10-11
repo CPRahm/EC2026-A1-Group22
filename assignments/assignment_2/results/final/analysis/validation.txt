@@ -1,0 +1,11 @@
+Results folder: /Users/notkartikye/VU Amsterdam/VU_P1/Evolutionary Computing/Assignment_1/22/22_code/assignments/assignment_2/results/final
+Runs found: 15
+Comparison budget: 3130 evaluations
+
+No errors.
+WARNING  Evolutionary runs stopped at different budgets [3130, 3310, 3890, 3940, 4370, 5110, 5450, 7490, 9320]; all methods are compared at 3130 evaluations.
+WARNING  random_search seed 101: baseline ran 10010 evaluations; only the first 3130 are used.
+WARNING  random_search seed 102: baseline ran 10010 evaluations; only the first 3130 are used.
+WARNING  random_search seed 103: baseline ran 10010 evaluations; only the first 3130 are used.
+WARNING  random_search seed 104: baseline ran 10010 evaluations; only the first 3130 are used.
+WARNING  random_search seed 105: baseline ran 10010 evaluations; only the first 3130 are used.

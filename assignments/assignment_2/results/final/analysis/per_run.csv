@@ -1,0 +1,16 @@
+method,seed,evaluations_run,best_at_budget,best_at_end,ran_past_comparison_budget
+ea_sigma_0.1,101,3940,1.333176,1.333176,True
+ea_sigma_0.1,102,7490,0.541476,0.453164,True
+ea_sigma_0.1,103,5450,1.329752,1.318596,True
+ea_sigma_0.1,104,3310,1.432238,1.432238,True
+ea_sigma_0.1,105,3890,1.228049,1.228049,True
+ea_sigma_0.5,101,4370,0.518757,0.518757,True
+ea_sigma_0.5,102,7490,0.489938,0.235548,True
+ea_sigma_0.5,103,9320,1.266606,1.083429,True
+ea_sigma_0.5,104,3130,0.831896,0.831896,False
+ea_sigma_0.5,105,5110,0.843001,0.843001,True
+random_search,101,10010,1.513425,1.287892,True
+random_search,102,10010,1.539292,1.382713,True
+random_search,103,10010,1.335098,1.335098,True
+random_search,104,10010,1.404589,1.336208,True
+random_search,105,10010,1.310697,1.310697,True

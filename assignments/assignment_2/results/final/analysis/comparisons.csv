@@ -1,0 +1,4 @@
+method_a,method_b,n_per_method,mean_difference_a_minus_b,a_better_in_seeds,A12_a_beats_b,A12_magnitude,mann_whitney_p,wilcoxon_paired_p,holm_mann_whitney_p,holm_wilcoxon_p
+ea_sigma_0.1,ea_sigma_0.5,5,0.3829,0/5,0.160,large,0.0952,0.0625,0.1905,0.1875
+ea_sigma_0.1,random_search,5,-0.2477,4/5,0.800,large,0.1508,0.1875,0.1905,0.1875
+ea_sigma_0.5,random_search,5,-0.6306,5/5,1.000,large,0.0079,0.0625,0.0238,0.1875

@@ -348,6 +348,22 @@ def a12_magnitude(value: float) -> str:
     return "large"
 
 
+def holm(p_values: list[float]) -> list[float]:
+    """Holm step-down adjusted p-values, in input order; NaN stays NaN.
+
+    m counts every comparison, so an untestable (NaN) one ranks above all
+    others: never less conservative than leaving it out.
+    """
+    m = len(p_values)
+    adjusted = [math.nan] * m
+    tested = sorted((i for i, p in enumerate(p_values) if not math.isnan(p)), key=lambda i: p_values[i])
+    running = 0.0
+    for k, index in enumerate(tested, start=1):
+        running = max(running, min(1.0, (m - k + 1) * p_values[index]))
+        adjusted[index] = running
+    return adjusted
+
+
 # ============================================================================ #
 #  Output
 # ============================================================================ #
@@ -364,15 +380,36 @@ def display_name(method: str) -> str:
     return method.replace("_", " ")
 
 
-def plot(curves: dict, methods: list[str], grid: np.ndarray, path_stem: Path, title: str) -> None:
-    # Sized for one GECCO column (3.33 in), readable at print size.
+def legend_name(method: str, group: list[Run], baseline_token: str) -> str:
+    """'EA, sigma = <value>' with sigma from the runs' summary.json, or e.g. 'Random search'."""
+    if is_baseline(method, baseline_token):
+        return display_name(method).capitalize()
+    sigmas = {(_read_json(run.folder / "summary.json") or {}).get("mutation_strength") for run in group}
+    if len(sigmas) == 1 and None not in sigmas:
+        return f"EA, \u03c3 = {sigmas.pop():g}"
+    return display_name(method)
+
+
+def generation_sizes(root: Path) -> tuple[int, int] | None:
+    """(population_size, number_of_children) as recorded in experiment.json, if present."""
+    experiment = _read_json(root / "experiment.json")
+    if experiment is None:
+        return None
+    ea = experiment["resolved"]["ea"]
+    return ea["population_size"], ea["number_of_children"]
+
+
+def plot(curves: dict, methods: list[str], grid: np.ndarray, path_stem: Path, title: str,
+         names: dict[str, str], sizes: tuple[int, int] | None) -> None:
+    # Sized for one GECCO column (3.33 in), readable at print size. The
+    # generation axis adds its own height, so the plot area stays the same.
     plt.rcParams.update({
         "font.size": 8, "axes.labelsize": 8, "legend.fontsize": 7,
         "xtick.labelsize": 7, "ytick.labelsize": 7,
         "axes.edgecolor": MUTED, "axes.labelcolor": INK,
         "xtick.color": MUTED, "ytick.color": MUTED, "text.color": INK,
     })
-    fig, ax = plt.subplots(figsize=(3.33, 2.4))
+    fig, ax = plt.subplots(figsize=(3.33, 2.4 if sizes is None else 2.75))
 
     for index, method in enumerate(methods):
         colour = COLOURS[index % len(COLOURS)]
@@ -380,7 +417,7 @@ def plot(curves: dict, methods: list[str], grid: np.ndarray, path_stem: Path, ti
         ax.fill_between(grid, mean - std, mean + std, color=colour, alpha=0.14, linewidth=0)
         ax.plot(
             grid, mean, color=colour, linewidth=1.5, linestyle=LINESTYLES[index % len(LINESTYLES)],
-            label=f"{display_name(method)} (n={curves[method]['n']})",
+            label=f"{names[method]} (n={curves[method]['n']})",
         )
 
     ax.set_xlabel("Evaluations")
@@ -390,9 +427,15 @@ def plot(curves: dict, methods: list[str], grid: np.ndarray, path_stem: Path, ti
     ax.set_axisbelow(True)
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
-    # Minimisation curves all start high, so the lower-left corner is the
-    # spot least likely to cover data.
-    ax.legend(frameon=False, loc="lower left", handlelength=2.6)
+    if sizes is not None:
+        # EA generation g ends at population_size + g * number_of_children evaluations.
+        size, children = sizes
+        top = ax.secondary_xaxis("top", functions=(lambda e: (e - size) / children,
+                                                   lambda g: g * children + size))
+        top.set_xlabel("Generation (EA)")
+    # Minimisation curves fall from the upper left, so the upper-right corner
+    # is the spot least likely to cover data.
+    ax.legend(frameon=False, loc="upper right", handlelength=2.6)
     if title:
         ax.set_title(title, fontsize=8, color=MUTED, loc="left")
     fig.tight_layout(pad=0.3)
@@ -453,7 +496,7 @@ def main() -> None:
             "evaluations_run": run.final_evaluations,
             "best_at_budget": f"{value:.6f}",
             "best_at_end": f"{run.best_so_far[-1]:.6f}",
-            "stopped_before_others": run.final_evaluations > budget,
+            "ran_past_comparison_budget": run.final_evaluations > budget,
         })
     write_csv(out / "per_run.csv", per_run)
 
@@ -472,25 +515,34 @@ def main() -> None:
 
     # --- comparisons.csv -------------------------------------------------- #
     comparisons = []
+    mann_whitney_p, wilcoxon_p = [], []
     for first, second in itertools.combinations(methods, 2):
         shared = sorted(set(finals[first]) & set(finals[second]))
         a = np.array([finals[first][s] for s in shared])
         b = np.array([finals[second][s] for s in shared])
         effect = a12(a, b)
+        mann_whitney_p.append(mann_whitney_exact(a, b))
+        wilcoxon_p.append(wilcoxon_exact(a, b))
         comparisons.append({
             "method_a": first, "method_b": second, "n_per_method": len(shared),
             "mean_difference_a_minus_b": f"{a.mean() - b.mean():.4f}",
             "a_better_in_seeds": f"{int(np.sum(a < b))}/{len(shared)}",
             "A12_a_beats_b": f"{effect:.3f}",
             "A12_magnitude": a12_magnitude(effect),
-            "mann_whitney_p": f"{mann_whitney_exact(a, b):.4f}",
-            "wilcoxon_paired_p": f"{wilcoxon_exact(a, b):.4f}",
+            "mann_whitney_p": f"{mann_whitney_p[-1]:.4f}",
+            "wilcoxon_paired_p": f"{wilcoxon_p[-1]:.4f}",
         })
+    # Holm over every comparison in this file, one family per test, from the
+    # unrounded p-values.
+    for row, mw, wx in zip(comparisons, holm(mann_whitney_p), holm(wilcoxon_p), strict=True):
+        row["holm_mann_whitney_p"] = f"{mw:.4f}"
+        row["holm_wilcoxon_p"] = f"{wx:.4f}"
     if comparisons:
         write_csv(out / "comparisons.csv", comparisons)
 
     title = "INCOMPLETE - validation failed" if errors else ""
-    plot(curves, methods, grid, out / "convergence", title)
+    names = {m: legend_name(m, [r for r in runs if r.method == m], args.baseline) for m in methods}
+    plot(curves, methods, grid, out / "convergence", title, names, generation_sizes(root))
 
     # --- console summary -------------------------------------------------- #
     print(f"\nFinal best distance at {budget} evaluations (lower is better):")

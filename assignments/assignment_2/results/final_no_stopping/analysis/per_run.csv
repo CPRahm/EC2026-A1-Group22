@@ -1,4 +1,4 @@
-method,seed,evaluations_run,best_at_budget,best_at_end,stopped_before_others
+method,seed,evaluations_run,best_at_budget,best_at_end,ran_past_comparison_budget
 ea_sigma_0.1,101,10010,1.309459,1.309459,False
 ea_sigma_0.1,102,10010,0.410007,0.410007,False
 ea_sigma_0.1,103,10010,1.260408,1.260408,False

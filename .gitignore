@@ -3,6 +3,8 @@
 *.mp4
 # Dirs
 __data__
+# Assignment 2 ARIEL population databases (large, regenerable)
+assignments/assignment_2/results/**/population.db
 # Mujoco
 MUJOCO_LOG.TXT
 # DrawIo

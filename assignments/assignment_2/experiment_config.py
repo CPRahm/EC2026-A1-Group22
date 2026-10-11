@@ -90,22 +90,27 @@ def condition_name(mutation_strength: float) -> str:
 
 # One strength from each regime the screen showed: sigma <= 0.2 either got
 # very close or stalled (bimodal across seeds); sigma = 0.5 (= the initial
-# weight std) was the only one to beat random search on every seed, with the
-# smallest spread. 5x apart: ~9% vs ~45% of the genome's norm per mutation.
+# weight std) had the smallest spread and beat random search on every seed
+# (as did sigma = 0.2; pilot_budgets.csv). 5x apart: ~9% vs ~45% of the
+# genome's norm per mutation.
 FINAL_SIGMAS: tuple[float, float] | None = (0.1, 0.5)
-# Fixed budget, no early stopping: in the screen, every EA condition's mean
-# curve had made >= 96% of its 10,010-evaluation gain by 7,510 evaluations
-# (single runs >= 90%), while ea.py's plateau rule (P=100, delta=0.01) would
-# have stopped all 18 screen runs early, one of them 0.90 m short of its
-# final result. plateau_patience > max_generations disables the rule.
+# Plateau stopping, ea.py's existing rule: a run stops after 200 consecutive
+# generations in which the best fitness has not fallen more than 0.01 m below
+# its value at the last reset; 1,000 generations is a safety cap. Source:
+# results/pilot_sigma/pilot_plateau.csv. With P=200, delta=0.01 the rule
+# stopped 16 of 18 screen runs, the earliest at 3,140 evaluations, losing at
+# most 0.09 m against running all 1,000 generations; P=100 stopped all 18 and
+# lost up to 0.90 m. The cap: in the screen, every EA condition's mean curve
+# had made >= 96% of its 10,010-evaluation gain by 7,510 evaluations (single
+# runs >= 90%).
 FINAL_EA: EAConfig | None = EAConfig(
     population_size=POPULATION_SIZE,
     number_of_children=NUMBER_OF_CHILDREN,
     parent_fraction=PARENT_FRACTION,
     mutation_probability=MUTATION_PROBABILITY,
     max_generations=1000,
-    plateau_patience=1001,
-    min_improvement=0.0,
+    plateau_patience=200,
+    min_improvement=0.01,
 )
 # Disjoint from every pilot seed (teammates' pilots used 0-3).
 FINAL_SEEDS = (101, 102, 103, 104, 105)
